@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light palette on bare :root; dark redefines the same tokens under .dark so
+   the whole portal themes with one class. Only --c-accent needs changing to
+   rebrand. Contrast pairs were chosen to clear WCAG AA for body text. */
+:root {
+  --c-background: 248 250 252;
+  --c-surface: 255 255 255;
+  --c-surface-2: 241 245 249;
+  --c-border: 214 222 232;
+  --c-foreground: 15 23 42;
+  --c-muted: 91 103 120;
+  --c-accent: 23 114 195;
+  --c-accent-green: 22 112 62;
+  --c-warning: 146 100 12;
+  --c-danger: 176 42 32;
+  color-scheme: light;
+}
+
+.dark {
+  --c-background: 13 17 23;
+  --c-surface: 22 27 34;
+  --c-surface-2: 33 38 45;
+  --c-border: 48 54 61;
+  --c-foreground: 230 237 243;
+  --c-muted: 148 158 170;
+  --c-accent: 88 166 255;
+  --c-accent-green: 63 185 80;
+  --c-warning: 210 153 34;
+  --c-danger: 248 113 113;
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+}
+
+*:focus-visible {
+  @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-background;
+}
+
+/* the portal is data-dense; keep scrollbars subtle but visible */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--c-border)) transparent;
+}
