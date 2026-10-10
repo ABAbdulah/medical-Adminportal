@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { CheckCircle2, ListTree, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { api } from "../../lib/api";
 import type { BankQuestion } from "../../lib/admin-types";
 import { DIFFICULTY_LABEL, QUESTION_TYPE_LABEL, formatDate, type Paged } from "../../lib/types";
 import { useDepartments } from "../../components/DepartmentPicker";
 import { BankQuestionForm } from "../../components/BankQuestionForm";
+import { TopicManager } from "../../components/TopicManager";
 import { Alert, Badge, Button, Card, CardBody, EmptyState, Input, Modal, Select, Spinner } from "../../components/ui";
 
 const PAGE_SIZE = 25;
@@ -42,6 +43,7 @@ export function AdminQuestions() {
   const [search, setSearch] = useState(q);
   const [editing, setEditing] = useState<BankQuestion | null>(null);
   const [creating, setCreating] = useState(false);
+  const [topicsOpen, setTopicsOpen] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<BankQuestion | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -145,9 +147,14 @@ export function AdminQuestions() {
             <Link to="/generate" className="text-accent hover:underline">Generate with AI</Link>.
           </p>
         </div>
-        <Button onClick={() => setCreating(true)}>
-          <Plus className="h-4 w-4" /> New question
-        </Button>
+        <span className="flex gap-2">
+          <Button variant="outline" onClick={() => setTopicsOpen(true)}>
+            <ListTree className="h-4 w-4" /> Index topics
+          </Button>
+          <Button onClick={() => setCreating(true)}>
+            <Plus className="h-4 w-4" /> New question
+          </Button>
+        </span>
       </div>
 
       <Card>
@@ -219,8 +226,9 @@ export function AdminQuestions() {
               <thead>
                 <tr className="border-b border-border text-xs text-muted">
                   <th className="px-4 py-3 font-medium">QID</th>
-                  <th className="px-4 py-3 font-medium">Topic</th>
+                  <th className="px-4 py-3 font-medium">Topic / title</th>
                   <th className="px-4 py-3 font-medium">Department</th>
+                  <th className="px-4 py-3 font-medium">Index topic</th>
                   <th className="px-4 py-3 font-medium">Type</th>
                   <th className="px-4 py-3 font-medium">Difficulty</th>
                   <th className="px-4 py-3 font-medium">Status</th>
@@ -236,9 +244,11 @@ export function AdminQuestions() {
                       <button type="button" className="block w-full truncate text-left hover:text-accent"
                         title={item.question_text} onClick={() => setEditing(item)}>
                         {item.topic}
+                        {item.title && <span className="block truncate text-xs text-muted">{item.title}</span>}
                       </button>
                     </td>
                     <td className="px-4 py-3 text-muted">{departmentName(item.department_id) ?? item.subject}</td>
+                    <td className="max-w-[12rem] truncate px-4 py-3 text-muted">{item.topic_name ?? "—"}</td>
                     <td className="px-4 py-3 text-muted">
                       {item.question_type ? QUESTION_TYPE_LABEL[item.question_type] : "—"}
                     </td>
@@ -261,9 +271,10 @@ export function AdminQuestions() {
               <Card key={item.id} className="p-4">
                 <button type="button" className="w-full text-left" onClick={() => setEditing(item)}>
                   <p className="truncate text-sm font-medium">{item.topic}</p>
+                  {item.title && <p className="truncate text-xs text-muted">{item.title}</p>}
                   <p className="mt-0.5 text-xs text-muted">
-                    #{item.qid ?? item.id} · {departmentName(item.department_id) ?? item.subject} ·{" "}
-                    {formatDate(item.created_at)}
+                    #{item.qid ?? item.id} · {departmentName(item.department_id) ?? item.subject}
+                    {item.topic_name ? ` · ${item.topic_name}` : ""} · {formatDate(item.created_at)}
                   </p>
                   <p className="mt-1.5 line-clamp-2 text-xs text-muted">{item.question_text}</p>
                 </button>
@@ -303,6 +314,7 @@ export function AdminQuestions() {
           flash(message);
         }}
       />
+      <TopicManager open={topicsOpen} onClose={() => setTopicsOpen(false)} />
 
       <Modal open={pendingDelete !== null} onClose={() => setPendingDelete(null)} title="Delete question?">
         <p className="text-sm text-muted">

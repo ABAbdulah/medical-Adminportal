@@ -58,7 +58,9 @@ async function request<T>(path: string, init: RequestInit = {}, raw = false): Pr
     );
   }
 
-  if (res.status === 401) {
+  // Only a request that carried a token can have an expired session; a 401
+  // without one (a failed sign-in) falls through to show the API's own message.
+  if (res.status === 401 && token) {
     setToken(null);
     onUnauthorized?.();
     throw new ApiError(401, "Your session has expired — please sign in again.");

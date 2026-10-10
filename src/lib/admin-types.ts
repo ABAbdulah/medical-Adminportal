@@ -50,12 +50,62 @@ export interface BankOption {
   explanation: string | null;
 }
 
+/** A guideline link behind a question (question_references). */
+export interface BankReference {
+  id?: number;
+  position?: number;
+  label: string;
+  url: string;
+  domain?: string;
+  /** review | explanation | learning_point | related | mentioned | manual */
+  section: string;
+  /** derived rather than printed in the source document */
+  inferred: boolean;
+  status_code?: number | null;
+  checked_at?: string | null;
+}
+
+export interface TopicReviewSection {
+  heading: string;
+  body: string;
+}
+
+export interface BankTopicReview {
+  title: string;
+  sections: TopicReviewSection[];
+}
+
+/** Provenance of an imported question (questions.import_meta). */
+export interface ImportMeta {
+  source?: string;
+  number?: number;
+  page?: number;
+  style_tag?: string;
+  difficulty_tag?: string;
+  layout?: string;
+}
+
+/** An index cluster (question_topics) — GET /api/admin/question-topics. */
+export interface BankTopic {
+  id: number;
+  department_id: number;
+  name: string;
+  slug: string;
+  description: string | null;
+  display_order: number;
+  is_active: boolean;
+  question_count: number;
+}
+
 /** A question already in the student bank (GET /api/admin/questions). */
 export interface BankQuestion {
   id: number;
   qid: number | null;
   subject: string;
   topic: string;
+  /** index title shown to students only after they answer */
+  title: string | null;
+  /** ADMIN-ONLY: students never see difficulty */
   difficulty: Difficulty | string;
   status: BankStatus | string;
   question_text: string;
@@ -63,7 +113,12 @@ export interface BankQuestion {
   learning_point: string | null;
   reference_source: string | null;
   department_id: number | null;
+  topic_id: number | null;
+  topic_name: string | null;
   question_type: QuestionType | null;
+  topic_review: BankTopicReview | null;
+  import_meta: ImportMeta | null;
+  references: BankReference[];
   created_at: string | null;
   updated_at: string;
   options: BankOption[];
