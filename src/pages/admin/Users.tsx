@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { KeyRound, Search } from "lucide-react";
+import { KeyRound, Search, UserPlus } from "lucide-react";
 import { api } from "../../lib/api";
 import { formatDay, type AdminPlan, type AdminUser, type Entitlement } from "../../lib/admin-types";
 import { Alert, Badge, Button, Card, EmptyState, Field, Input, Modal, Select, Spinner } from "../../components/ui";
+import { CreateUserDialog } from "../../components/CreateUserDialog";
 
 function planTone(plan: string): "neutral" | "accent" | "success" {
   return plan === "free" ? "neutral" : "success";
@@ -119,6 +120,7 @@ export function AdminUsers() {
   const [q, setQ] = useState("");
   const [savedId, setSavedId] = useState<number | null>(null);
   const [accessFor, setAccessFor] = useState<AdminUser | null>(null);
+  const [creating, setCreating] = useState(false);
   const plans = useQuery({ queryKey: ["admin", "plans"], queryFn: () => api.get<AdminPlan[]>("/api/admin/plans") });
   const planSlugs = ["free", ...(plans.data ?? []).filter((p) => p.is_active).map((p) => p.slug)];
 
@@ -168,12 +170,17 @@ export function AdminUsers() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-lg font-semibold">Users</h1>
-        <p className="text-sm text-muted">
-          Latest 200 student accounts — search by name or email. Changing the plan grants one period of it;
-          use <strong>Access</strong> to grant a set number of days or to revoke.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-lg font-semibold">Users</h1>
+          <p className="text-sm text-muted">
+            Latest 200 student accounts — search by name or email. Changing the plan grants one period of it;
+            use <strong>Access</strong> to grant a set number of days or to revoke.
+          </p>
+        </div>
+        <Button onClick={() => setCreating(true)}>
+          <UserPlus className="h-4 w-4" /> Create user
+        </Button>
       </div>
 
       <div className="relative max-w-sm">
@@ -243,6 +250,10 @@ export function AdminUsers() {
             ))}
           </div>
         </>
+      )}
+
+      {creating && (
+        <CreateUserDialog plans={(plans.data ?? []).filter((p) => p.is_active)} onClose={() => setCreating(false)} />
       )}
 
       {accessFor && (
