@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import {
   BarChart3, BookOpen, ClipboardCheck, FileStack, FileUp, LayoutDashboard, ListChecks, LogOut, Moon,
-  PenLine, Settings as SettingsIcon, Sparkles, Stethoscope, Sun, UserCog, Users,
+  PenLine, Settings as SettingsIcon, Sparkles, Stethoscope, Sun, Tags, UserCog, Users,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { api } from "../lib/api";
@@ -32,6 +32,7 @@ const AUTHORING: NavItem[] = [
 const ADMINISTRATION: NavItem[] = [
   { to: "/admin", label: "Platform analytics", icon: BarChart3, end: true },
   { to: "/admin/users", label: "Users", icon: Users },
+  { to: "/admin/plans", label: "Plans", icon: Tags },
   { to: "/admin/questions", label: "Question bank", icon: ListChecks },
   { to: "/admin/recalls", label: "Recalls", icon: FileStack },
   { to: "/admin/content", label: "Content", icon: BookOpen },

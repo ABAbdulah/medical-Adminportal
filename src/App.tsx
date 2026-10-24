@@ -13,6 +13,7 @@ import { ReviewOne } from "./pages/ReviewOne";
 import { Settings } from "./pages/Settings";
 import { AdminDashboard } from "./pages/admin/Dashboard";
 import { AdminUsers } from "./pages/admin/Users";
+import { AdminPlans } from "./pages/admin/Plans";
 import { AdminQuestions } from "./pages/admin/Questions";
 import { AdminRecalls } from "./pages/admin/Recalls";
 import { AdminContent } from "./pages/admin/Content";
@@ -43,6 +44,7 @@ export function App() {
         <Route path="settings" element={<Settings />} />
         <Route path="admin" element={<AdminOnly><AdminDashboard /></AdminOnly>} />
         <Route path="admin/users" element={<AdminOnly><AdminUsers /></AdminOnly>} />
+        <Route path="admin/plans" element={<AdminOnly><AdminPlans /></AdminOnly>} />
         <Route path="admin/questions" element={<AdminOnly><AdminQuestions /></AdminOnly>} />
         <Route path="admin/recalls" element={<AdminOnly><AdminRecalls /></AdminOnly>} />
         <Route path="admin/content" element={<AdminOnly><AdminContent /></AdminOnly>} />
