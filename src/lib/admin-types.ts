@@ -28,17 +28,59 @@ export interface Analytics {
   };
 }
 
-export type Plan = "free" | "monthly" | "annual";
-export const PLANS: readonly Plan[] = ["free", "monthly", "annual"];
-
 export interface AdminUser {
   id: number;
   email: string;
   full_name: string;
   country: string | null;
-  subscription_status: Plan | string;
+  /** the plan slug while access runs, otherwise "free" */
+  subscription_status: string;
+  premium_until: string | null;
   created_at: string;
   last_login: string | null;
+}
+
+/** GET/POST/PUT /api/admin/plans */
+export interface AdminPlan {
+  id: number;
+  slug: string;
+  name: string;
+  kind: "recurring" | "pass";
+  interval: "month" | "year" | null;
+  interval_count: number;
+  duration_days: number | null;
+  price_amount: number; // minor units
+  currency: string;
+  features: string[];
+  is_active: boolean;
+  display_order: number;
+  polar_product_id: string | null;
+  updated_at: string | null;
+}
+
+/** GET /api/admin/users/{id}/entitlements */
+export interface Entitlement {
+  id: number;
+  plan: string;
+  source: "admin" | "polar" | "dev" | "legacy";
+  status: "active" | "revoked" | "refunded";
+  starts_at: string | null;
+  ends_at: string | null;
+  running: boolean;
+  cancel_at_period_end: boolean;
+  polar_subscription_id: string | null;
+  polar_order_id: string | null;
+  granted_by: number | null;
+  note: string | null;
+}
+
+export function formatPrice(p: Pick<AdminPlan, "price_amount" | "currency">): string {
+  return p.price_amount === 0 ? "Free" : `${p.currency} ${(p.price_amount / 100).toFixed(2)}`;
+}
+
+export function formatCadence(p: Pick<AdminPlan, "kind" | "interval" | "interval_count" | "duration_days">): string {
+  if (p.kind === "pass") return `one payment, ${p.duration_days ?? "?"} days`;
+  return p.interval_count === 1 ? `every ${p.interval}` : `every ${p.interval_count} ${p.interval}s`;
 }
 
 export type BankStatus = "published" | "draft" | "archived";
