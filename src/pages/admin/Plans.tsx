@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { Plus, RefreshCw } from "lucide-react";
 import { api } from "../../lib/api";
-import { formatCadence, formatPrice, type AdminPlan } from "../../lib/admin-types";
+import { formatAmount, formatCadence, formatPrice, type AdminPlan } from "../../lib/admin-types";
 import { Alert, Badge, Button, Card, EmptyState, Field, Input, Modal, Select, Spinner, Textarea } from "../../components/ui";
 
 /** Mirrors routers/admin.py PlanIn. */
@@ -16,7 +16,7 @@ const planSchema = z
     interval: z.enum(["month", "year"]).nullable(),
     interval_count: z.number().int().min(1).max(24),
     duration_days: z.number().int().min(1).max(1095).nullable(),
-    price_amount: z.number().int().min(0).max(10_000_000),
+    price_amount: z.number().int().min(0).max(1_000_000_000),
     currency: z.string().trim().regex(/^[A-Z]{3}$/, "Three capital letters, e.g. USD"),
     features: z.array(z.string().trim().min(1).max(120)).max(12, "At most 12 features"),
     is_active: z.boolean(),
@@ -159,6 +159,11 @@ export function AdminPlans() {
                 <span className="font-semibold">{formatPrice(p)}</span>
                 <span className="text-muted"> · {formatCadence(p)}</span>
               </p>
+              {Object.keys(p.prices ?? {}).length > 0 && (
+                <p className="text-xs text-muted">
+                  Local prices: {Object.entries(p.prices).map(([cur, amt]) => formatAmount(amt, cur)).join(" · ")}
+                </p>
+              )}
               <p className="text-xs text-muted">
                 {p.polar_product_id ? <>Polar product <code>{p.polar_product_id}</code></> : "Not linked to Polar: students cannot buy it yet"}
               </p>
