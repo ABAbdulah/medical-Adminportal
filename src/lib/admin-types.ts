@@ -51,6 +51,8 @@ export interface AdminPlan {
   duration_days: number | null;
   price_amount: number; // minor units
   currency: string;
+  /** every price Polar has for the product, by currency (minor units); filled by Sync */
+  prices: Record<string, number>;
   features: string[];
   is_active: boolean;
   display_order: number;
@@ -74,8 +76,16 @@ export interface Entitlement {
   note: string | null;
 }
 
+/** Same shape as the student app's labels: "PKR 30,000", "USD 108.50". */
+export function formatAmount(amount: number, currency: string): string {
+  if (amount === 0) return "Free";
+  const major = amount / 100;
+  const digits = amount % 100 === 0 ? 0 : 2;
+  return `${currency} ${major.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits })}`;
+}
+
 export function formatPrice(p: Pick<AdminPlan, "price_amount" | "currency">): string {
-  return p.price_amount === 0 ? "Free" : `${p.currency} ${(p.price_amount / 100).toFixed(2)}`;
+  return formatAmount(p.price_amount, p.currency);
 }
 
 export function formatCadence(p: Pick<AdminPlan, "kind" | "interval" | "interval_count" | "duration_days">): string {
