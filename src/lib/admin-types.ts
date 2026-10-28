@@ -160,6 +160,8 @@ export interface BankQuestion {
   /** ADMIN-ONLY: students never see difficulty */
   difficulty: Difficulty | string;
   status: BankStatus | string;
+  /** in the free trial's sample pool: the only questions free students can open */
+  is_free_sample: boolean;
   question_text: string;
   explanation: string;
   learning_point: string | null;

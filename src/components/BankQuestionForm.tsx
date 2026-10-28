@@ -124,6 +124,7 @@ export function BankQuestionForm({
     (["easy", "medium", "hard"] as const).find((d) => d === question?.difficulty) ?? "medium",
   );
   const [questionType, setQuestionType] = useState<QuestionType | "">(question?.question_type ?? "");
+  const [freeSample, setFreeSample] = useState(question?.is_free_sample ?? false);
   const [stem, setStem] = useState(question?.question_text ?? "");
   const [options, setOptions] = useState(() => initialOptions(question));
   const [correct, setCorrect] = useState<Letter>(() => {
@@ -214,6 +215,7 @@ export function BankQuestionForm({
       topic_id: topicId,
       difficulty,
       question_type: questionType || null,
+      is_free_sample: freeSample,
       question_text: parsed.data.question_text,
       explanation: parsed.data.explanation,
       learning_point: parsed.data.learning_point || null,
@@ -287,6 +289,11 @@ export function BankQuestionForm({
               ))}
             </Select>
           </Field>
+          <label className="flex items-center gap-2 text-sm sm:col-span-2">
+            <input type="checkbox" checked={freeSample} className="h-4 w-4 accent-[rgb(var(--c-accent))]"
+              onChange={(e) => setFreeSample(e.target.checked)} />
+            Free sample: free-trial students can open this question (they see nothing else)
+          </label>
           <Field label="Question type" htmlFor="bq-type" className="sm:col-span-2"
             hint={questionType ? undefined : "Left blank, the server proposes one from the stem."}>
             <Select id="bq-type" value={questionType} onChange={(e) => setQuestionType(e.target.value as QuestionType | "")}>
