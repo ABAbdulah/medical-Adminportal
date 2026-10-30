@@ -36,6 +36,7 @@ export function AdminQuestions() {
   const status = params.get("status") ?? "published";
   const departmentId = params.get("department_id") ?? "";
   const difficulty = params.get("difficulty") ?? "";
+  const freeOnly = params.get("is_free_sample") === "true";
   const q = params.get("q") ?? "";
   const sort = SORT_OPTIONS.some((o) => o.value === params.get("sort")) ? params.get("sort")! : "qid";
   const page = Math.max(1, Number(params.get("page") ?? 1));
@@ -68,6 +69,7 @@ export function AdminQuestions() {
   const query = new URLSearchParams({ status, sort, page: String(page), page_size: String(PAGE_SIZE) });
   if (departmentId) query.set("department_id", departmentId);
   if (difficulty) query.set("difficulty", difficulty);
+  if (freeOnly) query.set("is_free_sample", "true");
   if (q) query.set("q", q);
 
   const list = useQuery({
@@ -199,6 +201,11 @@ export function AdminQuestions() {
               ))}
             </Select>
           </label>
+          <label className="flex items-end gap-2 pb-2">
+            <input type="checkbox" checked={freeOnly} className="h-4 w-4 accent-[rgb(var(--c-accent))]"
+              onChange={(e) => setParam("is_free_sample", e.target.checked ? "true" : "")} />
+            <span className="text-sm">Only the free sample pool</span>
+          </label>
           <label className="space-y-1.5">
             <span className="block text-sm font-medium">Sort by</span>
             <Select value={sort} onChange={(e) => setParam("sort", e.target.value === "qid" ? "" : e.target.value)}>
@@ -255,6 +262,7 @@ export function AdminQuestions() {
                     <td className="px-4 py-3"><Badge tone={difficultyTone(item.difficulty)}>{item.difficulty}</Badge></td>
                     <td className="px-4 py-3">
                       <Badge tone={item.status === "published" ? "accent" : "neutral"}>{item.status}</Badge>
+                      {item.is_free_sample && <span className="ml-1.5"><Badge tone="success">Free</Badge></span>}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-xs tabular-nums text-muted">
                       <time dateTime={item.created_at ?? undefined}>{formatDate(item.created_at)}</time>
@@ -281,6 +289,7 @@ export function AdminQuestions() {
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
                   <Badge tone={item.status === "published" ? "accent" : "neutral"}>{item.status}</Badge>
                   <Badge tone={difficultyTone(item.difficulty)}>{item.difficulty}</Badge>
+                  {item.is_free_sample && <Badge tone="success">Free</Badge>}
                   <span className="ml-auto">{actions(item)}</span>
                 </div>
               </Card>
