@@ -3,7 +3,6 @@
 export type QuestionType = "basic" | "difficult" | "investigation" | "management" | "risk_factor";
 export type Difficulty = "easy" | "medium" | "hard";
 export type CandidateStatus = "pending" | "approved" | "rejected";
-export type BriefStatus = "draft" | "planning" | "generating" | "ready" | "failed";
 export type Origin = "ai" | "sample" | "manual" | "import";
 
 export const QUESTION_TYPE_LABEL: Record<QuestionType, string> = {
@@ -62,12 +61,7 @@ export interface Meta {
   question_types: { value: QuestionType; description: string }[];
   sources: SourceOption[];
   limits: {
-    max_target_per_request: number;
-    daily_generation_cap: number;
-    generated_today: number;
     required_approvals: number;
-    max_attachments: number;
-    max_attachment_bytes: number;
   };
   settings: Record<string, unknown>;
   is_admin: boolean;
@@ -136,30 +130,6 @@ export interface CandidateDetail extends CandidateRow {
   published?: { id: number; qid: number } | null;
 }
 
-export interface Brief {
-  id: number;
-  title: string;
-  department_id: number;
-  department: string;
-  topic: string;
-  target_count: number;
-  generated_count: number;
-  question_types: QuestionType[];
-  difficulty_mix: Partial<Record<Difficulty, number>>;
-  instructions: string;
-  example_mcqs: string;
-  status: BriefStatus;
-  stale: boolean;
-  last_error: string | null;
-  model: string | null;
-  created_by: number;
-  created_by_name: string | null;
-  created_at: string | null;
-  updated_at: string | null;
-  counts: Partial<Record<CandidateStatus, number>>;
-  attachments?: { id: number; filename: string; content_type: string; size_bytes: number }[];
-}
-
 export interface Paged<T> {
   total: number;
   page: number;
@@ -173,7 +143,6 @@ export interface Stats {
   rejected: number;
   needs_attention: number;
   my_reviews_today: number;
-  generated_today: number;
   topics: { topic: string; department: string; approved: number; pending: number }[];
 }
 
@@ -217,14 +186,6 @@ export interface ImportPreview {
   invalid: number;
   rows: ImportRow[];
 }
-
-export const BRIEF_STATUS_LABEL: Record<BriefStatus, string> = {
-  draft: "Not started",
-  planning: "Planning angles",
-  generating: "Writing questions",
-  ready: "Ready for review",
-  failed: "Stopped",
-};
 
 export function formatDate(iso: string | null): string {
   if (!iso) return "—";

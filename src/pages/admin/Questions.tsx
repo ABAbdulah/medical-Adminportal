@@ -27,7 +27,7 @@ function difficultyTone(d: string): "success" | "warning" | "danger" | "neutral"
 
 /**
  * The live student bank: find, edit, publish drafts and delete. New questions
- * normally come in through Write / Import / Generate so doctors review them;
+ * normally come in through Write or Import so doctors review them;
  * "New question" here is the admin's direct path and publishes immediately.
  */
 export function AdminQuestions() {
@@ -144,9 +144,8 @@ export function AdminQuestions() {
           <h1 className="text-lg font-semibold">Question bank</h1>
           <p className="text-sm text-muted">
             Questions students can see. To add questions with doctor review, use{" "}
-            <Link to="/write" className="text-accent hover:underline">Write</Link>,{" "}
-            <Link to="/import" className="text-accent hover:underline">Import</Link> or{" "}
-            <Link to="/generate" className="text-accent hover:underline">Generate with AI</Link>.
+            <Link to="/write" className="text-accent hover:underline">Write</Link> or{" "}
+            <Link to="/import" className="text-accent hover:underline">Import</Link>.
           </p>
         </div>
         <span className="flex gap-2">

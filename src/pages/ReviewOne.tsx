@@ -277,7 +277,7 @@ export function ReviewOne() {
                 {ORIGIN_LABEL[c.origin]}
                 {c.created_by_name ? ` by ${c.created_by_name}` : ""} · {formatDate(c.created_at)}
                 {c.brief_id && (
-                  <> · <Link to={`/generate/${c.brief_id}`} className="underline">{c.brief_title ?? "request"}</Link></>
+                  <> · {c.brief_title ?? "AI request"}</>
                 )}
               </p>
               {c.reviews.length === 0 ? (

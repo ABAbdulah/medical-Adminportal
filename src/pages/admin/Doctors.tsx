@@ -69,7 +69,7 @@ export function AdminDoctors() {
       <div>
         <h1 className="text-lg font-semibold">Doctors</h1>
         <p className="text-sm text-muted">
-          Doctors can write, import, generate and review questions here. They cannot see the administration pages.
+          Doctors can write, import and review questions here. They cannot see the administration pages.
         </p>
       </div>
 
