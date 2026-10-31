@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import {
   BarChart3, BookOpen, ClipboardCheck, FileStack, FileUp, LayoutDashboard, ListChecks, LogOut, Moon,
-  PenLine, Settings as SettingsIcon, Sparkles, Stethoscope, Sun, Tags, UserCog, Users,
+  PenLine, Settings as SettingsIcon, Stethoscope, Sun, Tags, UserCog, Users,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { api } from "../lib/api";
@@ -24,7 +24,6 @@ const AUTHORING: NavItem[] = [
   { to: "/", label: "Overview", icon: LayoutDashboard, end: true },
   { to: "/write", label: "Write", icon: PenLine },
   { to: "/import", label: "Import", icon: FileUp },
-  { to: "/generate", label: "Generate with AI", icon: Sparkles },
   { to: "/review", label: "Review queue", icon: ClipboardCheck },
 ];
 

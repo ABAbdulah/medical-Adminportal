@@ -6,8 +6,6 @@ import { Login } from "./pages/Login";
 import { Overview } from "./pages/Overview";
 import { Write } from "./pages/Write";
 import { Import } from "./pages/Import";
-import { Generate } from "./pages/Generate";
-import { RequestDetail } from "./pages/RequestDetail";
 import { ReviewQueue } from "./pages/ReviewQueue";
 import { ReviewOne } from "./pages/ReviewOne";
 import { Settings } from "./pages/Settings";
@@ -37,8 +35,6 @@ export function App() {
         <Route index element={<Overview />} />
         <Route path="write" element={<Write />} />
         <Route path="import" element={<Import />} />
-        <Route path="generate" element={<Generate />} />
-        <Route path="generate/:briefId" element={<RequestDetail />} />
         <Route path="review" element={<ReviewQueue />} />
         <Route path="review/:candidateId" element={<ReviewOne />} />
         <Route path="settings" element={<Settings />} />
