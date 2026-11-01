@@ -7,6 +7,7 @@ import type { BankQuestion, BankReference, BankTopic, BankTopicReview } from "..
 import { DIFFICULTY_LABEL, LETTERS, QUESTION_TYPE_LABEL } from "../lib/types";
 import type { Difficulty, Letter, QuestionType } from "../lib/types";
 import { DepartmentPicker, useDepartments } from "./DepartmentPicker";
+import { QuestionImagesEditor } from "./QuestionImagesEditor";
 import { Alert, Button, Field, Input, Modal, Select, Textarea } from "./ui";
 
 /*
@@ -437,6 +438,13 @@ export function BankQuestionForm({
             </>
           )}
         </fieldset>
+
+        {/* ---- pictures (saved on their own, so only for an existing question) ---- */}
+        {question?.id ? (
+          <QuestionImagesEditor questionId={question.id} />
+        ) : (
+          <p className="text-xs text-muted">Pictures can be added after the question is created.</p>
+        )}
 
         {errors.length > 0 && (
           <Alert>
