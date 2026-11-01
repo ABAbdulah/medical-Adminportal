@@ -102,6 +102,21 @@ export interface BankOption {
   explanation: string | null;
 }
 
+export type ImageRole = "stem" | "teaching";
+
+/** A question picture (question_images); `url` is a signed link that expires, null without storage. */
+export interface BankImage {
+  id: number;
+  role: ImageRole;
+  position: number;
+  url: string | null;
+  caption: string;
+  width: number;
+  height: number;
+  content_type: string;
+  bytes: number;
+}
+
 /** A guideline link behind a question (question_references). */
 export interface BankReference {
   id?: number;
