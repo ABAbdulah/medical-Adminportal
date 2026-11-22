@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, FileUp, PenLine, Sparkles } from "lucide-react";
+import { AlertTriangle, FileUp, PenLine } from "lucide-react";
 import { api } from "../lib/api";
 import type { Meta, Stats } from "../lib/types";
 import { Alert, Button, Card, CardBody, CardHeader, Spinner } from "../components/ui";
@@ -44,7 +44,7 @@ export function Overview() {
         <Stat label="Your reviews today" value={s.my_reviews_today} />
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2">
         <Link to="/write">
           <Card className="flex h-full items-start gap-3 p-4 transition-colors hover:border-accent/50">
             <PenLine className="mt-0.5 h-5 w-5 text-accent" />
@@ -60,15 +60,6 @@ export function Overview() {
             <span>
               <span className="block font-medium">Import a file</span>
               <span className="block text-sm text-muted">Upload CSV or JSON and preview every row first.</span>
-            </span>
-          </Card>
-        </Link>
-        <Link to="/generate">
-          <Card className="flex h-full items-start gap-3 p-4 transition-colors hover:border-accent/50">
-            <Sparkles className="mt-0.5 h-5 w-5 text-accent" />
-            <span>
-              <span className="block font-medium">Ask the AI</span>
-              <span className="block text-sm text-muted">Give instructions and examples; review what comes back.</span>
             </span>
           </Card>
         </Link>
@@ -94,7 +85,7 @@ export function Overview() {
         <CardBody className="p-0">
           {s.topics.length === 0 ? (
             <p className="px-4 py-8 text-center text-sm text-muted">
-              No questions yet. Write one, import a file, or ask the AI to draft a batch.
+              No questions yet. Write one or import a file.
             </p>
           ) : (
             <div className="overflow-x-auto">

@@ -27,7 +27,7 @@ function difficultyTone(d: string): "success" | "warning" | "danger" | "neutral"
 
 /**
  * The live student bank: find, edit, publish drafts and delete. New questions
- * normally come in through Write / Import / Generate so doctors review them;
+ * normally come in through Write or Import so doctors review them;
  * "New question" here is the admin's direct path and publishes immediately.
  */
 export function AdminQuestions() {
@@ -36,6 +36,7 @@ export function AdminQuestions() {
   const status = params.get("status") ?? "published";
   const departmentId = params.get("department_id") ?? "";
   const difficulty = params.get("difficulty") ?? "";
+  const freeOnly = params.get("is_free_sample") === "true";
   const q = params.get("q") ?? "";
   const sort = SORT_OPTIONS.some((o) => o.value === params.get("sort")) ? params.get("sort")! : "qid";
   const page = Math.max(1, Number(params.get("page") ?? 1));
@@ -68,6 +69,7 @@ export function AdminQuestions() {
   const query = new URLSearchParams({ status, sort, page: String(page), page_size: String(PAGE_SIZE) });
   if (departmentId) query.set("department_id", departmentId);
   if (difficulty) query.set("difficulty", difficulty);
+  if (freeOnly) query.set("is_free_sample", "true");
   if (q) query.set("q", q);
 
   const list = useQuery({
@@ -142,9 +144,8 @@ export function AdminQuestions() {
           <h1 className="text-lg font-semibold">Question bank</h1>
           <p className="text-sm text-muted">
             Questions students can see. To add questions with doctor review, use{" "}
-            <Link to="/write" className="text-accent hover:underline">Write</Link>,{" "}
-            <Link to="/import" className="text-accent hover:underline">Import</Link> or{" "}
-            <Link to="/generate" className="text-accent hover:underline">Generate with AI</Link>.
+            <Link to="/write" className="text-accent hover:underline">Write</Link> or{" "}
+            <Link to="/import" className="text-accent hover:underline">Import</Link>.
           </p>
         </div>
         <span className="flex gap-2">
@@ -198,6 +199,11 @@ export function AdminQuestions() {
                 <option key={value} value={value}>{label}</option>
               ))}
             </Select>
+          </label>
+          <label className="flex items-end gap-2 pb-2">
+            <input type="checkbox" checked={freeOnly} className="h-4 w-4 accent-[rgb(var(--c-accent))]"
+              onChange={(e) => setParam("is_free_sample", e.target.checked ? "true" : "")} />
+            <span className="text-sm">Only the free sample pool</span>
           </label>
           <label className="space-y-1.5">
             <span className="block text-sm font-medium">Sort by</span>
@@ -255,6 +261,7 @@ export function AdminQuestions() {
                     <td className="px-4 py-3"><Badge tone={difficultyTone(item.difficulty)}>{item.difficulty}</Badge></td>
                     <td className="px-4 py-3">
                       <Badge tone={item.status === "published" ? "accent" : "neutral"}>{item.status}</Badge>
+                      {item.is_free_sample && <span className="ml-1.5"><Badge tone="success">Free</Badge></span>}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-xs tabular-nums text-muted">
                       <time dateTime={item.created_at ?? undefined}>{formatDate(item.created_at)}</time>
@@ -281,6 +288,7 @@ export function AdminQuestions() {
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
                   <Badge tone={item.status === "published" ? "accent" : "neutral"}>{item.status}</Badge>
                   <Badge tone={difficultyTone(item.difficulty)}>{item.difficulty}</Badge>
+                  {item.is_free_sample && <Badge tone="success">Free</Badge>}
                   <span className="ml-auto">{actions(item)}</span>
                 </div>
               </Card>

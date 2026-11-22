@@ -131,6 +131,21 @@ export interface BankOption {
   explanation: string | null;
 }
 
+export type ImageRole = "stem" | "teaching";
+
+/** A question picture (question_images); `url` is a signed link that expires, null without storage. */
+export interface BankImage {
+  id: number;
+  role: ImageRole;
+  position: number;
+  url: string | null;
+  caption: string;
+  width: number;
+  height: number;
+  content_type: string;
+  bytes: number;
+}
+
 /** A guideline link behind a question (question_references). */
 export interface BankReference {
   id?: number;
@@ -189,6 +204,8 @@ export interface BankQuestion {
   /** ADMIN-ONLY: students never see difficulty */
   difficulty: Difficulty | string;
   status: BankStatus | string;
+  /** in the free trial's sample pool: the only questions free students can open */
+  is_free_sample: boolean;
   question_text: string;
   explanation: string;
   learning_point: string | null;

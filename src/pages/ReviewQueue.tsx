@@ -11,7 +11,6 @@ export function ReviewQueue() {
   const status = (params.get("status") as CandidateStatus | "all") ?? "pending";
   const origin = params.get("origin") ?? "";
   const departmentId = params.get("department_id") ?? "";
-  const briefId = params.get("brief_id") ?? "";
   const needsAttention = params.get("needs_attention") === "1";
   const sort = params.get("sort") === "oldest" ? "oldest" : "newest";
   const page = Number(params.get("page") ?? 1);
@@ -21,7 +20,6 @@ export function ReviewQueue() {
   const query = new URLSearchParams({ status, sort, page: String(page), page_size: "25" });
   if (origin) query.set("origin", origin);
   if (departmentId) query.set("department_id", departmentId);
-  if (briefId) query.set("brief_id", briefId);
   if (needsAttention) query.set("needs_attention", "true");
 
   const candidates = useQuery({
@@ -100,7 +98,7 @@ export function ReviewQueue() {
         <Alert>{(candidates.error as Error).message}</Alert>
       ) : total === 0 ? (
         <EmptyState title="Nothing here"
-          description="No questions match these filters. Write one, import a file, or ask the AI for a batch." />
+          description="No questions match these filters. Write one or import a file." />
       ) : (
         <Card>
           <CardHeader title={`${total} question${total === 1 ? "" : "s"}`}
