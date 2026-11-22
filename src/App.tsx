@@ -18,6 +18,7 @@ import { AdminQuestions } from "./pages/admin/Questions";
 import { AdminRecalls } from "./pages/admin/Recalls";
 import { AdminContent } from "./pages/admin/Content";
 import { AdminDoctors } from "./pages/admin/Doctors";
+import { AdminAIConversations } from "./pages/admin/AIConversations";
 
 export function App() {
   const { user, ready } = useAuth();
@@ -44,6 +45,7 @@ export function App() {
         <Route path="settings" element={<Settings />} />
         <Route path="admin" element={<AdminOnly><AdminDashboard /></AdminOnly>} />
         <Route path="admin/users" element={<AdminOnly><AdminUsers /></AdminOnly>} />
+        <Route path="admin/ai-conversations" element={<AdminOnly><AdminAIConversations /></AdminOnly>} />
         <Route path="admin/plans" element={<AdminOnly><AdminPlans /></AdminOnly>} />
         <Route path="admin/questions" element={<AdminOnly><AdminQuestions /></AdminOnly>} />
         <Route path="admin/recalls" element={<AdminOnly><AdminRecalls /></AdminOnly>} />
