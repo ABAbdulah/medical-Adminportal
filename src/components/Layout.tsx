@@ -2,7 +2,7 @@ import { Navigate, NavLink, Outlet } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import {
-  BarChart3, BookOpen, ClipboardCheck, FileStack, FileUp, LayoutDashboard, ListChecks, LogOut, Moon,
+  BarChart3, BookOpen, ClipboardCheck, FileStack, FileUp, LayoutDashboard, ListChecks, LogOut, MessageSquareText, Moon,
   PenLine, Settings as SettingsIcon, Stethoscope, Sun, Tags, UserCog, Users,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -31,6 +31,7 @@ const AUTHORING: NavItem[] = [
 const ADMINISTRATION: NavItem[] = [
   { to: "/admin", label: "Platform analytics", icon: BarChart3, end: true },
   { to: "/admin/users", label: "Users", icon: Users },
+  { to: "/admin/ai-conversations", label: "AI conversations", icon: MessageSquareText },
   { to: "/admin/plans", label: "Plans", icon: Tags },
   { to: "/admin/questions", label: "Question bank", icon: ListChecks },
   { to: "/admin/recalls", label: "Recalls", icon: FileStack },

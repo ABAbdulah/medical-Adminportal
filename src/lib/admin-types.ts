@@ -40,6 +40,35 @@ export interface AdminUser {
   last_login: string | null;
 }
 
+export interface AIConversationSummary {
+  id: number;
+  /** Pseudonymous account reference; account name and email are not returned. */
+  user_id: number;
+  title: string;
+  created_at: string | null;
+  last_message_at: string | null;
+  message_count: number;
+}
+
+export interface AdminAIConversationPage {
+  items: AIConversationSummary[];
+  page: number;
+  page_size: number;
+  total: number;
+}
+
+export interface AdminAIConversationDetail extends Pick<AIConversationSummary, "id" | "user_id" | "title" | "created_at"> {
+  question_id: number | null;
+  topic_slug: string | null;
+  messages: {
+    id: number;
+    role: "user" | "assistant" | string;
+    content: string;
+    created_at: string | null;
+    sources: (string | { name: string; section?: string | null; tier?: number | null })[];
+  }[];
+}
+
 /** GET/POST/PUT /api/admin/plans */
 export interface AdminPlan {
   id: number;
